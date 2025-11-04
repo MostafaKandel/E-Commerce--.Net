@@ -9,7 +9,7 @@ namespace E_Commerce
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +31,8 @@ namespace E_Commerce
 
             #region Data Seed - Apply Migrations
 
-           app.MigrateDatabase()
-               .SeedDatabase();
+            await app.MigrateDatabaseAsync();
+            await app.SeedDatabaseAsync();
 
 
             #endregion
@@ -51,7 +51,7 @@ namespace E_Commerce
 
             app.MapControllers();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
