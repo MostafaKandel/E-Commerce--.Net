@@ -3,6 +3,10 @@ using E_Commerce.Domain.Contracts;
 using E_Commerce.Extensions;
 using E_Commerce.Persistence.Data.DataSeed;
 using E_Commerce.Persistence.Data.DbContexts;
+using E_Commerce.Persistence.Repositories;
+using E_Commerce.Service_Abstraction;
+using E_Commerce.Services;
+using E_Commerce.Services.MappingProfile;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce
@@ -25,6 +29,10 @@ namespace E_Commerce
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDataIntializer, DataIntializer>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(x => x.AddProfile<ProductProfile>());
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddTransient<ProductPictureUrlResolver>();
             #endregion
 
             var app = builder.Build();
@@ -50,6 +58,8 @@ namespace E_Commerce
 
 
             app.MapControllers();
+
+            app.UseStaticFiles();
 
             await app.RunAsync();
         }
